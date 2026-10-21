@@ -9,7 +9,7 @@ import { onAuthReady } from "/src/authentication.js";
 
 function showName() {
     // Pass a CALLBACK function to run when Firebase finishes checking login status
-    onAuthReady(function(user) {  // Firebase passes the user object (or null)
+    onAuthReady(function (user) {  // Firebase passes the user object (or null)
         if (user) {
             // User is logged in
             const name = user.displayName || user.email;  // Use email if name is missing
@@ -59,7 +59,7 @@ function addHikeData() {
     addDoc(hikesRef, {
         code: "NV01", name: "Mount Seymour Trail", city: "North Vancouver",
         level: "hard", details: "Amazing ski slope views.", length: 8.2,
-        hike_time: 120, lat: 49.38847101455571,lng: -122.94092543551031,
+        hike_time: 120, lat: 49.38847101455571, lng: -122.94092543551031,
         last_updated: serverTimestamp()
     });
 }
@@ -101,13 +101,16 @@ async function displayCardsDynamically() {
             // Clone the template
             let newcard = cardTemplate.content.cloneNode(true);
             // Get hike data once
-            const hike = doc.data(); 
+            const hike = doc.data();
 
             // Populate the card with hike data
             newcard.querySelector('.card-title').textContent = hike.name;
             newcard.querySelector('.card-text').textContent = hike.details || `Located in ${hike.city}.`;
             newcard.querySelector('.card-length').textContent = hike.length;
+            
             newcard.querySelector('.card-image').src = `./images/${hike.code}.jpg`;
+            // Add the link with the document ID
+            newcard.querySelector(".read-more").href = `eachHike.html?docID=${doc.id}`;
 
             // Attach the new card to the container
             document.getElementById("hikes-go-here").appendChild(newcard);
